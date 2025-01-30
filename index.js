@@ -1,4 +1,14 @@
 const { v4: uuidv4 } = require("uuid");
+const mysql = require("mysql2");
+
+
+// Database connection
+const connection = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "your_mysql_password",
+    database: "developer_profiles"
+  });
 
 let data=[
     {
