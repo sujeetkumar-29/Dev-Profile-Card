@@ -23,7 +23,7 @@ Dev Profile Card is a web application that allows tech-related users to create, 
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/dev-profile-card.git
+    git clone https://github.com/sujeetkumar-29/Dev-Profile-Card.git
     ```
 2. Navigate to the project directory:
     ```bash

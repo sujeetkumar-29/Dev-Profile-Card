@@ -1,0 +1,23 @@
+{
+  "name": "dev-profile-card",
+  "version": "1.0.0",
+  "description": "Dev Profile Card is a web application that allows tech-related users to create, edit, and delete their profile cards. Each profile card can be managed securely using a password.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sujeetkumar-29/Dev-Profile-Card.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sujeetkumar-29/Dev-Profile-Card/issues"
+  },
+  "homepage": "https://github.com/sujeetkumar-29/Dev-Profile-Card#readme",
+  "dependencies": {
+    "uuid": "^11.0.5"
+  }
+}
