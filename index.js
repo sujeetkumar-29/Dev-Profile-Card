@@ -7,6 +7,8 @@ const path = require("path");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 // Database connection
 const db = mysql.createConnection({
     host: "localhost",
@@ -244,6 +246,35 @@ app.get("/", (req, res) => {
     }));
 
     res.render("index", { users });
+  });
+});
+
+// Route to render the add developer form
+app.get("/add", (req, res) => {
+  res.render("add");
+});
+
+// Route to handle form submission
+app.post("/add", (req, res) => {
+  const { name, title, bio, imageUrl, skills, portfolioLink, githubLink, linkedinLink } = req.body;
+
+  // Insert into the users table
+  const userQuery = `INSERT INTO users (name, title, bio, imageUrl, portfolioLink, githubLink, linkedinLink) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+  db.query(userQuery, [name, title, bio, imageUrl, portfolioLink, githubLink, linkedinLink], (err, result) => {
+    if (err) throw err;
+
+    const userId = result.insertId;
+
+    // Insert skills into skills table
+    const skillList = skills.split(",").map(skill => skill.trim());
+    const skillQuery = `INSERT INTO skills (user_id, skill) VALUES ?`;
+    const skillValues = skillList.map(skill => [userId, skill]);
+
+    db.query(skillQuery, [skillValues], err => {
+      if (err) throw err;
+      res.redirect("/");
+    });
   });
 });
 
