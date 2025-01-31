@@ -6,10 +6,19 @@ const mysql = require("mysql2");
 const connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "your_mysql_password",
-    database: "developer_profiles"
+    database: "developer_profiles",
+    password: "Sql@123",
   });
+// try{
+//   connection.query("SHOW TABLES",(err,results)=>{
+//     if(err) throw err;
+//     console.log(results);
 
+//   })
+// }catch(err){
+//   console.log(err);
+// }
+// connection.end();
 let data=[
     {
         id: uuidv4(),
@@ -132,5 +141,42 @@ let data=[
       xLink: "https://twitter.com/devtaylorg"
     }
   ];
-  
-  console.log(data);
+  // Insert Users
+data.forEach(user => {
+  connection.query(
+    `INSERT INTO users (id, imageUrl, name, title, bio, password, portfolioLink, githubLink, linkedinLink, instaLink, xLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [user.id, user.imageUrl, user.name, user.title, user.bio, user.password, user.portfolioLink, user.githubLink, user.linkedinLink, user.instaLink, user.xLink],
+    (err, results) => {
+      if (err) throw err;
+      console.log("Inserted user:", user.name);
+
+      // Insert projects
+      user.projects.forEach(project => {
+        connection.query(
+          `INSERT INTO projects (user_id, projectName, projectLink) VALUES (?, ?, ?)`,
+          [user.id, project.projectName, project.projectLink],
+          (err, results) => {
+            if (err) throw err;
+            console.log("Inserted project:", project.projectName);
+          }
+        );
+      });
+
+      // Insert skills
+      user.skills.forEach(skill => {
+        connection.query(
+          `INSERT INTO skills (user_id, skill) VALUES (?, ?)`,
+          [user.id, skill],
+          (err, results) => {
+            if (err) throw err;
+            console.log("Inserted skill:", skill);
+          }
+        );
+      });
+    }
+  );
+});
+
+// Close connection
+setTimeout(() => connection.end(), 5000);
+  // console.log(data);
