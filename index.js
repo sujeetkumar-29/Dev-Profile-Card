@@ -256,25 +256,39 @@ app.get("/add", (req, res) => {
 
 // Route to handle form submission
 app.post("/add", (req, res) => {
-  const { name, title, bio, imageUrl, skills, portfolioLink, githubLink, linkedinLink } = req.body;
+  let { name, imageUrl, title, bio, password, skills, projects, portfolioLink, githubLink, linkedinLink } = req.body;
+  
+  let id = uuidv4(); // Generate unique ID
 
-  // Insert into the users table
-  const userQuery = `INSERT INTO users (name, title, bio, imageUrl, portfolioLink, githubLink, linkedinLink) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  let skillArray = skills.split(",").map(skill => skill.trim());
+  let projectArray = projects.split(",").map(proj => {
+    let [projectName, projectLink] = proj.split("::").map(p => p.trim());
+    return { projectName, projectLink };
+  });
 
-  db.query(userQuery, [name, title, bio, imageUrl, portfolioLink, githubLink, linkedinLink], (err, result) => {
+  let insertUserQuery = `INSERT INTO users (id, name, imageUrl, title, bio, password, portfolioLink, githubLink, linkedinLink) 
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  
+  db.query(insertUserQuery, [id, name, imageUrl, title, bio, password, portfolioLink, githubLink, linkedinLink], (err, result) => {
     if (err) throw err;
 
-    const userId = result.insertId;
+    // Insert skills
+    let insertSkillQuery = "INSERT INTO skills (user_id, skill) VALUES ?";
+    let skillValues = skillArray.map(skill => [id, skill]);
 
-    // Insert skills into skills table
-    const skillList = skills.split(",").map(skill => skill.trim());
-    const skillQuery = `INSERT INTO skills (user_id, skill) VALUES ?`;
-    const skillValues = skillList.map(skill => [userId, skill]);
-
-    db.query(skillQuery, [skillValues], err => {
+    db.query(insertSkillQuery, [skillValues], (err, result) => {
       if (err) throw err;
-      res.redirect("/");
     });
+
+    // Insert projects
+    let insertProjectQuery = "INSERT INTO projects (user_id, projectName, projectLink) VALUES ?";
+    let projectValues = projectArray.map(proj => [id, proj.projectName, proj.projectLink]);
+
+    db.query(insertProjectQuery, [projectValues], (err, result) => {
+      if (err) throw err;
+    });
+
+    res.redirect("/");
   });
 });
 
