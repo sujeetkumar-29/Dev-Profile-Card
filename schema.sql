@@ -8,8 +8,6 @@ CREATE TABLE users (
     portfolioLink TEXT,
     githubLink TEXT,
     linkedinLink TEXT,
-    instaLink TEXT,
-    xLink TEXT
 );
 CREATE TABLE projects (
     id INT AUTO_INCREMENT  PRIMARY KEY,
