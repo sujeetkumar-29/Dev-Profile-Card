@@ -33,6 +33,7 @@
             <% users.forEach(user => { %>
                 <div class="col-md-4 mb-4">
                     <div class="card p-3 shadow-sm">
+                        <a href="/edit/<%= user.id %>" class="btn btn-secondary mb-2">Edit</a>
                         <div class="text-center">
                             <img src="<%= user.imageUrl %>" alt="Profile Picture">
                             <h3 class="mt-2"><%= user.name %></h3>

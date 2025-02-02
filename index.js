@@ -291,6 +291,99 @@ app.post("/add", (req, res) => {
     res.redirect("/");
   });
 });
+app.get("/edit/:id", (req, res) => {
+  let userId = req.params.id;
+
+  let query = `
+    SELECT users.*, 
+           GROUP_CONCAT(DISTINCT projects.projectName, '::', projects.projectLink) AS projects,
+           GROUP_CONCAT(DISTINCT skills.skill) AS skills
+    FROM users
+    LEFT JOIN projects ON users.id = projects.user_id
+    LEFT JOIN skills ON users.id = skills.user_id
+    WHERE users.id = ?
+    GROUP BY users.id;
+  `;
+
+  db.query(query, [userId], (err, results) => {
+    if (err) throw err;
+
+    if (results.length === 0) {
+      return res.send("User not found!");
+    }
+
+    let user = {
+      id: results[0].id,
+      name: results[0].name,
+      imageUrl: results[0].imageUrl,
+      title: results[0].title,
+      bio: results[0].bio,
+      skills: results[0].skills ? results[0].skills.split(",") : [],
+      projects: results[0].projects
+        ? results[0].projects.split(",").map(proj => {
+            let [projectName, projectLink] = proj.split("::");
+            return { projectName, projectLink };
+          })
+        : [],
+      portfolioLink: results[0].portfolioLink,
+      githubLink: results[0].githubLink,
+      linkedinLink: results[0].linkedinLink,
+      // instaLink: results[0].instaLink,
+      // xLink: results[0].xLink
+    };
+
+    res.render("edit", { user });
+  });
+});
+
+app.post("/edit/:id", (req, res) => {
+  let userId = req.params.id;
+  let { name, imageUrl, title, bio, password, skills, projects, portfolioLink, githubLink, linkedinLink } = req.body;
+
+  // First, verify the password
+  db.query("SELECT password FROM users WHERE id = ?", [userId], (err, results) => {
+    if (err) throw err;
+
+    if (results.length === 0) {
+      return res.send("User not found!");
+    }
+
+    if (results[0].password !== password) {
+      return res.send("Incorrect password! Please try again.");
+    }
+
+    // Update user information
+    let updateUserQuery = `UPDATE users SET name=?, imageUrl=?, title=?, bio=?, portfolioLink=?, githubLink=?, linkedinLink=? WHERE id=?`;
+    let userValues = [name, imageUrl, title, bio, portfolioLink, githubLink, linkedinLink, userId];
+ 
+    db.query(updateUserQuery, userValues, (err, result) => {
+      if (err) throw err;
+
+      // Delete old skills & insert new ones
+      db.query("DELETE FROM skills WHERE user_id = ?", [userId], () => {
+        let skillArray = skills.split(",").map(skill => skill.trim());
+        let insertSkillQuery = "INSERT INTO skills (user_id, skill) VALUES ?";
+        let skillValues = skillArray.map(skill => [userId, skill]);
+
+        db.query(insertSkillQuery, [skillValues], () => {});
+      });
+
+      // Delete old projects & insert new ones
+      db.query("DELETE FROM projects WHERE user_id = ?", [userId], () => {
+        let projectArray = projects.split(",").map(proj => {
+          let [projectName, projectLink] = proj.split("::").map(p => p.trim());
+          return { projectName, projectLink };
+        });
+        let insertProjectQuery = "INSERT INTO projects (user_id, projectName, projectLink) VALUES ?";
+        let projectValues = projectArray.map(proj => [userId, proj.projectName, proj.projectLink]);
+
+        db.query(insertProjectQuery, [projectValues], () => {});
+      });
+
+      res.redirect("/");
+    });
+  });
+});
 
 
   app.listen(8080, () => {
