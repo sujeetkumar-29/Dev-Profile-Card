@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Developer Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="text-center mb-4">Edit Developer Profile</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form action="/edit/<%= user.id %>" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" value="<%= user.name %>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Profile Image URL</label>
+                        <input type="text" name="imageUrl" class="form-control" value="<%= user.imageUrl %>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" value="<%= user.title %>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Bio</label>
+                        <textarea name="bio" class="form-control" rows="3"><%= user.bio %></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Skills (comma-separated)</label>
+                        <input type="text" name="skills" class="form-control" value="<%= user.skills.join(', ') %>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Projects (Format: Name::Link, Name::Link)</label>
+                        <input type="text" name="projects" class="form-control"
+                            value="<%= user.projects.map(proj => proj.projectName + '::' + proj.projectLink).join(', ') %>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Portfolio Link</label>
+                        <input type="text" name="portfolioLink" class="form-control" value="<%= user.portfolioLink %>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">GitHub Link</label>
+                        <input type="text" name="githubLink" class="form-control" value="<%= user.githubLink %>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">LinkedIn Link</label>
+                        <input type="text" name="linkedinLink" class="form-control" value="<%= user.linkedinLink %>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Instagram Link</label>
+                        <input type="text" name="instaLink" class="form-control" value="<%= user.instaLink %>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Twitter (X) Link</label>
+                        <input type="text" name="xLink" class="form-control" value="<%= user.xLink %>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Enter Password to Confirm Changes</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
