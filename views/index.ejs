@@ -27,13 +27,18 @@
 </head>
 <body class="bg-light">
     <div class="container py-5">
-        <h1 class="text-center mb-4">Developer Profiles</h1>
+        <h1 class="text-center mb-4 ">Developer Profiles</h1>
         <a href="/add" class="btn btn-primary mb-4">Add New Developer</a>
         <div class="row">
             <% users.forEach(user => { %>
                 <div class="col-md-4 mb-4">
                     <div class="card p-3 shadow-sm">
                         <a href="/edit/<%= user.id %>" class="btn btn-secondary mb-2">Edit</a>
+                        <form action="/delete/<%= user.id %>" method="POST" class="mt-2">
+                            <input type="password" name="password" class="form-control mb-2" placeholder="Enter Password" required>
+                            <button type="submit" class="btn btn-danger w-100">Delete Profile</button>
+                        </form>
+                        
                         <div class="text-center">
                             <img src="<%= user.imageUrl %>" alt="Profile Picture">
                             <h3 class="mt-2"><%= user.name %></h3>

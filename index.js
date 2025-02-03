@@ -328,8 +328,6 @@ app.get("/edit/:id", (req, res) => {
       portfolioLink: results[0].portfolioLink,
       githubLink: results[0].githubLink,
       linkedinLink: results[0].linkedinLink,
-      // instaLink: results[0].instaLink,
-      // xLink: results[0].xLink
     };
 
     res.render("edit", { user });
@@ -384,6 +382,42 @@ app.post("/edit/:id", (req, res) => {
     });
   });
 });
+
+app.post("/delete/:id", (req, res) => {
+  let userId = req.params.id;
+  let { password } = req.body;
+
+  // Verify password before deletion
+  db.query("SELECT password FROM users WHERE id = ?", [userId], (err, results) => {
+    if (err) throw err;
+
+    if (results.length === 0) {
+      return res.send("User not found!");
+    }
+
+    if (results[0].password !== password) {
+      return res.send("Incorrect password! Please try again.");
+    }
+
+    // Delete user from the database
+    db.query("DELETE FROM users WHERE id = ?", [userId], (err) => {
+      if (err) throw err;
+
+      // Delete associated skills
+      db.query("DELETE FROM skills WHERE user_id = ?", [userId], (err) => {
+        if (err) throw err;
+      });
+
+      // Delete associated projects
+      db.query("DELETE FROM projects WHERE user_id = ?", [userId], (err) => {
+        if (err) throw err;
+      });
+
+      res.redirect("/");
+    });
+  });
+});
+
 
 
   app.listen(8080, () => {
