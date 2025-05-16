@@ -67,10 +67,31 @@
     </style>
 </head>
 
-<body class="bg-light">
+<body class=" text-light" style="background-color: rgb(42, 40, 40);">
+    <!-- Header / Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">DevProfiles</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/add">Add Developer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#footer">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
     <div class="container py-5">
-        <h1 class="text-center mb-4">Developer Profiles</h1>
-        <a href="/add" class="btn btn-primary mb-4">Add New Developer</a>
+        <!-- <h1 class="text-center mb-4">Developer Profiles</h1>
+        <a href="/add" class="btn btn-primary mb-4">Add New Developer</a> -->
         <div class="row">
             <% users.forEach(user=> { %>
                 <div class="col-md-4 mb-4">
@@ -184,6 +205,21 @@
             }
         });
     </script>
+    <!-- Footer -->
+<footer id="footer" class="bg-dark text-light py-4 mt-5">
+    <div class="container text-center">
+        <p class="mb-1">&copy; <%= new Date().getFullYear() %> DevProfiles. All rights reserved.</p>
+        <p class="mb-0">
+            Built with <i class="fas fa-code text-danger"></i> and <i class="fab fa-bootstrap text-purple"></i>
+        </p>
+        <div class="mt-2">
+            <a href="https://github.com/your-org" target="_blank" class="text-light mx-2"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/company/your-org" target="_blank" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:support@devprofiles.com" class="text-light mx-2"><i class="fas fa-envelope"></i></a>
+        </div>
+    </div>
+</footer>
+
 </body>
 
 </html>
