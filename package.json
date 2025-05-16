@@ -2,6 +2,9 @@
  "engines": {
     "node": "22.12.0"
   },
+  "scripts": {
+  "start": "node index.js"
+},
   "name": "dev-profile-card",
   "version": "1.0.0",
   "description": "Dev Profile Card is a web application that allows tech-related users to create, edit, and delete their profile cards. Each profile card can be managed securely using a password.",
