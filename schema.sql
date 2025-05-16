@@ -7,7 +7,7 @@ CREATE TABLE users (
     password VARCHAR(255),
     portfolioLink TEXT,
     githubLink TEXT,
-    linkedinLink TEXT,
+    linkedinLink TEXT
 );
 CREATE TABLE projects (
     id INT AUTO_INCREMENT  PRIMARY KEY,
